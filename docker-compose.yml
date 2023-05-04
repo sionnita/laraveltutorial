@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  tesEmail:
+    build:
+      args:
+        user: rahanpas
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: beadmin
+    container_name: beadmin-tesEmail
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - beadmin
+
+  nginx:
+    image: nginx:alpine
+    container_name: tesEmail-nginx
+    restart: unless-stopped
+    ports:
+      - 8164:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - beadmin
+
+networks:
+  beadmin:
+    driver: bridge
